@@ -13,13 +13,14 @@ const getRelatives = () => {
             if(err){
                 reject(err);
             }else{
+                console.log('Connected to DB Server for READ');
                 const db = client.db(dbName);
                 const collection = db.collection(colName);
                 collection.find({}).toArray(function(err, docs){
                     if (err) {
                         reject(err);
                     } else {
-                        console.log(docs);
+                        // console.log(docs);
                         resolve(docs);
                         client.close();
                     };

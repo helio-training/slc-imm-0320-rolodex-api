@@ -59,7 +59,28 @@ const addRelative = (relative) => {
 const updateRelativeValues = (relative) => {};  //PATCH
 const updateRelative = (id, relative) => {};    //PUT, UPSERT
 //DELETE functions
-const deleteRelative = (id) => {};
+const deleteRelative = (id) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(DB_URL, settings, function (err, client) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log('Connected to DB Server for DELETE');
+                const db = client.db(dbName);
+                const collection = db.collection(colName);
+                collection.deleteOne({ _id: ObjectID(id) }, (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(result);    //TODO: clip down result
+                        client.close();
+                    }
+                })
+            }
+        })
+    })
+    return iou;
+};
 
 // Still needs Exports
 module.exports = {

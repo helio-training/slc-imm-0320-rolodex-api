@@ -33,7 +33,28 @@ const getRelatives = () => {
 const getRelativeById = (id) => {};
 const getRelativeByValue = (key, value) => {};
 //CREATE function
-const addRelative = (relative) => {};
+const addRelative = (relative) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(DB_URL, settings, function(err, client) {
+            if(err){
+                reject(err);
+            } else {
+                console.log('Connected to DB Server for CREATE');
+                const db = client.db(dbName);
+                const collection = db.collection(colName);
+                collection.insertOne(relative, (err, result) => {
+                    if(err){
+                        reject(err);
+                    } else{
+                        resolve(result);    //TODO: trim down result
+                        client.close();
+                    }
+                })
+            }
+        })
+    })
+    return iou;
+};
 //UPDATE functions, depicting two ways to handle IDs
 const updateRelativeValues = (relative) => {};  //PATCH
 const updateRelative = (id, relative) => {};    //PUT, UPSERT

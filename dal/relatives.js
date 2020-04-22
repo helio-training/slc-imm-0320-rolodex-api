@@ -46,7 +46,7 @@ const addRelative = (relative) => {
                     if(err){
                         reject(err);
                     } else{
-                        resolve(result);    //TODO: trim down result
+                        resolve(result.ops[0]);
                         client.close();
                     }
                 })

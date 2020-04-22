@@ -72,7 +72,7 @@ const deleteRelative = (id) => {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(result);    //TODO: clip down result
+                        resolve({ deleted_id: id });    //TODO: clip down result
                         client.close();
                     }
                 })

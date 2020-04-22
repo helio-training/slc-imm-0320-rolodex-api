@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {
     getRelatives,
-    addRelative
+    addRelative,
+    deleteRelative
 } = require('../../dal/relatives');
 // const getRelatives = require('../../dal/relatives').getRelatives;
 
@@ -35,7 +36,13 @@ router.patch('/', async function (req, res) {
 });
 
 router.delete('/:id', async function (req, res) {
-    res.send('DELETE at /api/relatives');
+    try {
+        const data = await deleteRelative(req.params.id);
+        res.send(data);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Issue, Check Server Logs');
+    };
 });
 
 module.exports = router;

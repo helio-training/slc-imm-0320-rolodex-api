@@ -3,7 +3,8 @@ const router = express.Router();
 const {
     getRelatives,
     addRelative,
-    deleteRelative
+    deleteRelative,
+    updateRelative
 } = require('../../dal/relatives');
 // const getRelatives = require('../../dal/relatives').getRelatives;
 
@@ -28,7 +29,13 @@ router.post('/', async function (req, res) {
 });
 
 router.put('/:id', async function (req, res) {
-    res.send('PUT at /api/relatives');
+    try {
+        const data = await updateRelative(req.params.id, req.body);
+        res.send(data);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Issue, Check Server Logs');
+    };
 });
 
 router.patch('/', async function (req, res) {

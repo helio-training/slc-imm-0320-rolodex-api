@@ -57,7 +57,32 @@ const addRelative = (relative) => {
 };
 //UPDATE functions, depicting two ways to handle IDs
 const updateRelativeValues = (relative) => {};  //PATCH
-const updateRelative = (id, relative) => {};    //PUT, UPSERT
+const updateRelative = (id, relative) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(DB_URL, settings, function (err, client) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log('Connected to DB Server for PUT');
+                const db = client.db(dbName);
+                const collection = db.collection(colName);
+                collection.replaceOne({_id: ObjectID(id)}, 
+                    relative,
+                    { upsert: true },
+                    (err, result) => {
+                        if(err){
+                            reject(err);
+                        } else{
+                            resolve({ updated_id: id });
+                            client.close();
+                        }
+                    }
+                );
+            }
+        })
+    })
+    return iou;
+};    //PUT, UPSERT
 //DELETE functions
 const deleteRelative = (id) => {
     const iou = new Promise((resolve, reject) => {
